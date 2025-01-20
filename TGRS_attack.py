@@ -171,10 +171,30 @@ else:
         union_of_shortenings=union_of_shortenings.stack(D)
 
 end=time.time()   
-print(end-begin)   
+print('The implementtion of the attack take', end-begin, 'seconds.')   
 
 
-## checking if the attack is successful
-recovered_code=codes.LinearCode(union_of_shortenings)
-recovered_code==MONCODE 
+#checking whether the monomial subcode is recovered
+#recovered_code=codes.LinearCode(union_of_shortenings)
+#recovered_code==MONCODE  
+
+
+
+# we will compute ( C* (C*^2 )^perp  )^perp to recover the GRS code containing the monomial code
+
+#R: Basis of monomial code
+R=recovered_code.basis()
+
+#R2: Basis of the dual of Schur Square
+Schur_square=codes.LinearCode(schur_matrix(R,R))
+Schur_square_perp=Schur_square.dual_code()
+R2=Schur_square_perp.basis()
+
+# GRS_code_dual= ( C* (C*^2 )^perp  ), GRS_code= ( C* (C*^2 )^perp  )^perp 
+GRS_code_dual_generator=schur_matrix( R,R2 )
+GRS_code_dual=codes.LinearCode( GRS_code_generator  )
+GRS_code=GRS_code_dual.dual_code()
+
+
+
 
